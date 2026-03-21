@@ -1,4 +1,4 @@
-﻿using AutoUpdaterDotNET;
+using AutoUpdaterDotNET;
 using iNKORE.UI.WPF.Controls;
 using iNKORE.UI.WPF.Modern;
 using iNKORE.UI.WPF.Modern.Controls;
@@ -1770,19 +1770,23 @@ namespace ZongziTEK.BlackboardSticker
         #region Panel Show & Hide
 
         private bool _isSettingsWindowOpen = false;
+        private SettingsWindow _settingsWindow = null;
 
         private void iconShowSettingsPanel_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            /*if (borderSettingsPanel.Visibility == Visibility.Collapsed) borderSettingsPanel.Visibility = Visibility.Visible;
-            else btnHideSettingsPanel_Click(null, null);
-
-            ButtonRefreshBNSStatus_Click(null, null);*/
             if (!_isSettingsWindowOpen)
             {
-                SettingsWindow settingsWindow = new();
-                settingsWindow.Closed += SettingsWindow_Closed;
-                settingsWindow.Show();
+                _settingsWindow = new SettingsWindow();
+                _settingsWindow.Closed += SettingsWindow_Closed;
+                _settingsWindow.Show();
                 _isSettingsWindowOpen = true;
+            }
+            else
+            {
+                // 窗口已打开：若已最小化则还原，然后激活到前台
+                if (_settingsWindow.WindowState == WindowState.Minimized)
+                    _settingsWindow.WindowState = WindowState.Normal;
+                _settingsWindow.Activate();
             }
         }
 
